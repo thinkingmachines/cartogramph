@@ -1,0 +1,73 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>CartogramPH</title>
+  <meta name="description" content="Cartogram v0.1">
+  <meta name="author" content="Thinking Machines">
+
+  <style type="text/css">
+
+	.chartbtn {
+	    margin-top: 30px;
+	    margin-bottom: 25px;
+	}
+
+	.tiny{
+	    font-size: .8em;
+	}
+
+	#munid{
+	    font-size: 1.2em;
+	    font-weight: 'bold';
+	}
+
+	.hidden{
+	    display: none;
+	}
+
+  </style>
+  <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+	<div id="vis"></div>
+
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/d3.v3.min.js"></script>
+
+	<script src="js/topojson.v1.min.js"></script>
+
+	<script src="js/cartogramph.js"></script>
+
+	<script type="text/javascript">
+		var visID = "#vis"; 
+		//div containing the svg
+
+		var geoData = "data/philippines-topo2.json"; 
+		//link to the map json source file
+
+		var thematicDataSource = "data/philpopulation2015.csv"; 
+		//link to population data
+
+		var thematicColumn = "pop2015"; 
+		//thematic variable
+
+		var sequentialDataSource = "data/philpoverty2015.csv"; 
+		//link to poverty data
+
+		var sequentialColumn = "poverty2015"; //variable you want to map
+
+		var mapcolor = "#ef4631";
+
+		var cartogram = new cartogramph(visID,geoData,thematicDataSource,thematicColumn,sequentialDataSource,sequentialColumn,mapcolor);
+		
+	</script>
+
+
+</body>
+</html>
