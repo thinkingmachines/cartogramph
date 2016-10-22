@@ -1,9 +1,9 @@
 ## Synopsis
 
 CartogramPH was developed as an alternative map visualization tool of the Philippines for anyone to use.
-Read more about the project on [http://stories.thinkingmachin.es/cartogramph]
+Read more about the project on [our blog](http://stories.thinkingmachin.es/cartogramph).
 
-Tweet us at [http://twitter.com/thinkdatasci] with the hashtag #CartogramPH if you use it!
+Tweet us at [@thinkdatasci](http://twitter.com/thinkdatasci) with the hashtag #CartogramPH if you use it!
 
 ## Code Example
 
@@ -29,7 +29,7 @@ var cartogram = new cartogramph(visID,geoData,thematicDataSource,thematicColumn,
 ## Motivation
 
 Making cartograms requires a lot of time, we want to make the process simpler.
-Read more about the project on [http://stories.thinkingmachin.es/cartogramph]
+Read more about the project on [our blog](http://stories.thinkingmachin.es/cartogramph)
 
 ## Installation
 
@@ -44,7 +44,7 @@ Simply import JQuery, the D3 library, Topojson.js and the cartogramph.js files i
 
 ## Contributors
 
-Mika Aldaba - @hailmika
+Mika Aldaba - [@hailmika](http://twitter.com/thinkdatasci)
 
 ## License
 
