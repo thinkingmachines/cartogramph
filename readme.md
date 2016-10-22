@@ -1,7 +1,9 @@
 ## Synopsis
 
-CartogramPH was developed as an alternative map visualization tool for anyone to use.
-Read more about the project on stories.thinkingmachin.es/cartogramph
+CartogramPH was developed as an alternative map visualization tool of the Philippines for anyone to use.
+Read more about the project on [stories.thinkingmachin.es/cartogramph]
+
+Tweet us at [twitter.com/thinkdatasci] with the hashtag #CartogramPH if you use it!
 
 ## Code Example
 
@@ -17,6 +19,8 @@ var sequentialDataSource = "/static/data/philpoverty2015.csv"; //link to poverty
 
 var sequentialColumn = "poverty2015"; //variable you want to map
 
+var sequentialLabel = "Poverty Rate"; //label of variable
+
 var mapcolor = "#ef4631";
 
 var cartogram = new cartogramph(visID,geoData,thematicDataSource,thematicColumn,sequentialDataSource,sequentialColumn,mapcolor);
@@ -25,7 +29,7 @@ var cartogram = new cartogramph(visID,geoData,thematicDataSource,thematicColumn,
 ## Motivation
 
 Making cartograms requires a lot of time, we want to make the process simpler.
-Read more about the project on stories.thinkingmachin.es/cartogramph
+Read more about the project on [stories.thinkingmachin.es/cartogramph]
 
 ## Installation
 
