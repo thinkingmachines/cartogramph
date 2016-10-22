@@ -1,21 +1,21 @@
 ## Synopsis
 
 CartogramPH was developed as an alternative map visualization tool of the Philippines for anyone to use.
-Read more about the project on [stories.thinkingmachin.es/cartogramph]
+Read more about the project on [http://stories.thinkingmachin.es/cartogramph]
 
-Tweet us at [twitter.com/thinkdatasci] with the hashtag #CartogramPH if you use it!
+Tweet us at [http://twitter.com/thinkdatasci] with the hashtag #CartogramPH if you use it!
 
 ## Code Example
 
 ```javascript
 var visID = "#vis"; //div containing the svg
 
-var geoData = "/static/data/philippines-topo2.json"; //link to the map json source file
+var geoData = "data/philippines-topo2.json"; //link to the map json source file
 
-var thematicDataSource = "/static/data/philpopulation2015.csv"; //link to population data
+var thematicDataSource = "data/philpopulation2015.csv"; //link to population data
 var thematicColumn = "pop2015"; //thematic variable
 
-var sequentialDataSource = "/static/data/philpoverty2015.csv"; //link to poverty data
+var sequentialDataSource = "data/philpoverty2015.csv"; //link to poverty data
 
 var sequentialColumn = "poverty2015"; //variable you want to map
 
@@ -29,7 +29,7 @@ var cartogram = new cartogramph(visID,geoData,thematicDataSource,thematicColumn,
 ## Motivation
 
 Making cartograms requires a lot of time, we want to make the process simpler.
-Read more about the project on [stories.thinkingmachin.es/cartogramph]
+Read more about the project on [http://stories.thinkingmachin.es/cartogramph]
 
 ## Installation
 
