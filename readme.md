@@ -1,35 +1,36 @@
 ## Synopsis
 
 CartogramPH was developed as an alternative map visualization tool of the Philippines for anyone to use.
-Read more about the project on [our blog](http://stories.thinkingmachin.es/cartogramph).
+Read more about the project on [our blog](http://stories.thinkingmachin.es/cartogram).
 
 Tweet us at [@thinkdatasci](http://twitter.com/thinkdatasci) with the hashtag #CartogramPH if you use it!
 
 ## Code Example
 
 ```javascript
-var visID = "#vis"; //div containing the svg
-
-var geoData = "data/philippines-topo2.json"; //link to the map json source file
-
-var thematicDataSource = "data/philpopulation2015.csv"; //link to population data
-var thematicColumn = "pop2015"; //thematic variable
+//declare variables
+var thematicDataSource = "data/random.csv"; //link to population data
+var thematicColumn = "poverty2015"; //thematic variable
+var thematicLabel = "Random"; //label of variable
 
 var sequentialDataSource = "data/philpoverty2015.csv"; //link to poverty data
-
-var sequentialColumn = "poverty2015"; //variable you want to map
-
+var sequentialColumn = "poverty2015"; //variable you want to map (0-100%)
 var sequentialLabel = "Poverty Rate"; //label of variable
 
-var mapcolor = "#ef4631";
+//Make a plain cartogram using the population as the default thematic variable
+simpleCartogram("#vis","#ef4631");
 
-var cartogram = new cartogramph(visID,geoData,thematicDataSource,thematicColumn,sequentialDataSource,sequentialColumn,mapcolor);
+//Make a cartogram using a different thematic variable
+thematicCartogram("#vis2",thematicDataSource,thematicColumn,thematicLabel,"#00aac5");
+
+//Make a chloropleth cartogram
+sequentialCartogram("#vis3",sequentialDataSource,sequentialColumn,sequentialLabel,"#c30202");
 ```
 
 ## Motivation
 
 Making cartograms requires a lot of time, we want to make the process simpler.
-Read more about the project on [our blog](http://stories.thinkingmachin.es/cartogramph)
+Read more about the project on [our blog](http://stories.thinkingmachin.es/cartogram)
 
 ## Installation
 
@@ -41,6 +42,10 @@ Read more about the project on [our blog](http://stories.thinkingmachin.es/carto
 ```
 
 Simply import JQuery, the D3 library, Topojson.js and the cartogramph.js files into your code.
+
+Make sure the paths to the data files are correct before running the server.
+
+If you're using custom csvs, check the province names to see if the names are in all caps and match the ones in the sample csvs.
 
 ## Contributors
 

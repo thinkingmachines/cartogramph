@@ -19,7 +19,7 @@
 	    font-size: .8em;
 	}
 
-	#munid{
+	.munid{
 	    font-size: 1.2em;
 	    font-weight: 'bold';
 	}
@@ -35,7 +35,16 @@
 </head>
 
 <body>
-	<div id="vis"></div>
+	
+
+    <h2>Philippine Population 2015</h2>
+    <div id="vis"></div>
+
+    <h2>Random Numbers</h2>
+    <div id="vis2"></div>
+
+    <h2>Philippine Poverty Rate 2015</h2>
+    <div id="vis3"></div>
 
 	<script src="js/jquery-1.11.3.min.js"></script>
 	<script src="js/d3.v3.min.js"></script>
@@ -45,28 +54,21 @@
 	<script src="js/cartogramph.js"></script>
 
 	<script type="text/javascript">
-		var visID = "#vis"; 
-		//div containing the svg
+		//declare variables
+		var thematicDataSource = "data/random.csv"; //link to population data
+		var thematicColumn = "poverty2015"; //thematic variable
+		var thematicLabel = "Random"; //label of variable
 
-		var geoData = "data/philippines-topo2.json"; 
-		//link to the map json source file
-
-		var thematicDataSource = "data/philpopulation2015.csv"; 
-		//link to population data
-
-		var thematicColumn = "pop2015"; 
-		//thematic variable
-
-		var sequentialDataSource = "data/philpoverty2015.csv"; 
-		//link to poverty data
-
-		var sequentialColumn = "poverty2015"; //variable you want to map
-
+		var sequentialDataSource = "data/philpoverty2015.csv"; //link to poverty data
+		var sequentialColumn = "poverty2015"; //variable you want to map (0-100%)
 		var sequentialLabel = "Poverty Rate"; //label of variable
 
-		var mapcolor = "#ef4631";
+		//function cartogramph(visID,mapcolor)
+		simpleCartogram("#vis","#ef4631");
 
-		var cartogram = new cartogramph(visID,geoData,thematicDataSource,thematicColumn,sequentialDataSource,sequentialColumn,sequentialLabel,mapcolor);
+		thematicCartogram("#vis2",thematicDataSource,thematicColumn,thematicLabel,"#00aac5");
+
+		sequentialCartogram("#vis3",sequentialDataSource,sequentialColumn,sequentialLabel,"#c30202");
 		
 	</script>
 
