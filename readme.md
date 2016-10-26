@@ -5,6 +5,14 @@ Read more about the project on [our blog](http://stories.thinkingmachin.es/carto
 
 Tweet us at [@thinkdatasci](http://twitter.com/thinkdatasci) with the hashtag #CartogramPH if you use it!
 
+## Supported Cartogram Types
+
+
+1. Simple Cartogram - Province size is defined by population. 
+2. Thematic Cartogram - Province size is defined by a custom variable `thematicColumn` that you set!
+3. Sequential Cartogram - Province size is defined by population. Heatmap color intensity changes depending on a custom variable `sequentialColumn` that you set. 
+
+
 ## Code Example
 
 ```javascript
@@ -17,7 +25,7 @@ var sequentialDataSource = "data/philpoverty2015.csv"; //link to poverty data
 var sequentialColumn = "poverty2015"; //variable you want to map (0-100%)
 var sequentialLabel = "Poverty Rate"; //label of variable
 
-//Make a plain cartogram using the population as the default thematic variable
+//Make a default population-based cartogram 
 simpleCartogram("#vis","#ef4631");
 
 //Make a cartogram using a different thematic variable
