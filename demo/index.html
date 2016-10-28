@@ -56,25 +56,25 @@
 	<script type="text/javascript">
 		//defaults
 		var GEODATA = "data/provinces.json"; //link to the map json source file
-		var THEMATIC = "data/philpopulation.csv"; //link to population data
-		var THEMATICCOL = "pop2015"; //thematic variable
-		var THEMATICLAB = "Population"; //label
+		var POPULATION = "data/philpopulation.csv"; //link to population data
+		var POPULATION_COL = "pop2015"; //thematic variable
+		var POPULATION_LABEL = "Population"; //label
 
 		//declare variables
-		var thematicDataSource = "data/random_numbers.csv"; //link to population data
-		var thematicColumn = "poverty2015"; //thematic variable
-		var thematicLabel = "Random"; //label of variable
+		var customDataSource = "data/random.csv"; //link to population data
+		var customColumn = "poverty2015"; //thematic variable
+		var customLabel = "Random"; //label of variable
 
-		var sequentialDataSource = "data/philpoverty.csv"; //link to poverty data
-		var sequentialColumn = "poverty2015"; //variable you want to map (0-100%)
-		var sequentialLabel = "Poverty Rate"; //label of variable
+		var chloroplethDataSource = "data/philpoverty.csv"; //link to poverty data
+		var chloroplethColumn = "poverty2015"; //variable you want to map (0-100%)
+		var chloroplethLabel = "Poverty Rate"; //label of variable
 
 		//function cartogramph(visID,mapcolor)
 		simpleCartogram("#vis","#ef4631");
 
-		thematicCartogram("#vis2",thematicDataSource,thematicColumn,thematicLabel,"#00aac5");
+		customCartogram("#vis2",customDataSource,customColumn,customLabel,"#00aac5");
 
-		sequentialCartogram("#vis3",sequentialDataSource,sequentialColumn,sequentialLabel,"#c30202");
+		chloroplethCartogram("#vis3",chloroplethDataSource,chloroplethColumn,chloroplethLabel,"#c30202");
 		
 	</script>
 
