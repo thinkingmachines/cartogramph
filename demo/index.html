@@ -54,12 +54,18 @@
 	<script src="js/cartogramph.js"></script>
 
 	<script type="text/javascript">
+		//defaults
+		var GEODATA = "data/provinces.json"; //link to the map json source file
+		var THEMATIC = "data/philpopulation.csv"; //link to population data
+		var THEMATICCOL = "pop2015"; //thematic variable
+		var THEMATICLAB = "Population"; //label
+
 		//declare variables
-		var thematicDataSource = "data/random.csv"; //link to population data
+		var thematicDataSource = "data/random_numbers.csv"; //link to population data
 		var thematicColumn = "poverty2015"; //thematic variable
 		var thematicLabel = "Random"; //label of variable
 
-		var sequentialDataSource = "data/philpoverty2015.csv"; //link to poverty data
+		var sequentialDataSource = "data/philpoverty.csv"; //link to poverty data
 		var sequentialColumn = "poverty2015"; //variable you want to map (0-100%)
 		var sequentialLabel = "Poverty Rate"; //label of variable
 

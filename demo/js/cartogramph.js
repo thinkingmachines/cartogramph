@@ -1,9 +1,4 @@
-//defaults
 
-var GEODATA = "data/philippines-topo2.json"; //link to the map json source file
-var THEMATIC = "data/philpopulation2015.csv"; //link to population data
-var THEMATICCOL = "pop2015"; //thematic variable
-var THEMATICLAB = "Population"; //label
 
 //makes a plain cartogram
 function simpleCartogram(visID,mapcolor){    
@@ -39,7 +34,7 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
     .range(["#fff8ef",mapcolor]);
 
     //draw vis
-    var height = 700;
+    var height = 900;
     var width  = 600;
 
     var vis = d3.select(visID).append("svg").attr("width", width).attr("height", height).attr("cartogram","true");
@@ -54,7 +49,7 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
 
     var nodes = [];
     var mmnodes = [];  //metromanila nodes
-    var cnodes = []; //cagayan region
+    var cnodes = []; //central luzon region
     var cbnodes = []; //calabarzon region
     var nmnodes = [];  //north of manila
     var smnodes = [];  //south of manila
@@ -96,20 +91,19 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
             .attr("class","munid")
             .text("Philippines");
       
-        var provinces = topojson.feature(geo_data, geo_data.objects.philippines).features;
+        var provinces = topojson.feature(geo_data, geo_data.objects.provsh).features;
 
         //enter thematic data
         d3.csv(thematicDataSource, function(error,csv){
           
             csv.forEach(function(d, i) {
-                provinces.forEach(function(e, j) {
-                
+                provinces.forEach(function(e, j) {                    
                     if (d.province === e.properties.PROVINCE.toUpperCase()) {
                         e[thematicColumn] = +d[thematicColumn];              
                     }
-                    if ((e.properties.PROVINCE==="Metropolitan Manila")&&(d.province === e.properties.NAME_2.toUpperCase())){                            
-                        e[thematicColumn] = +d[thematicColumn];   
-                    }
+                    // if ((e.properties.PROVINCE==="Metropolitan Manila")&&(d.province === e.properties.NAME_2.toUpperCase())){                            
+                    //     e[thematicColumn] = +d[thematicColumn];   
+                    // }
 
                 })
 
@@ -143,9 +137,9 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
                             if (f.province === e.properties.PROVINCE.toUpperCase()) {
                               e[sequentialColumn] = +f[sequentialColumn];             
                             }
-                            if ((e.properties.PROVINCE==="Metropolitan Manila")&&(f.province === e.properties.NAME_2.toUpperCase())){                            
-                              e[sequentialColumn] = +f[sequentialColumn]; 
-                            }
+                            // if ((e.properties.PROVINCE==="Metropolitan Manila")&&(f.province === e.properties.NAME_2.toUpperCase())){                            
+                            //   e[sequentialColumn] = +f[sequentialColumn]; 
+                            // }
                         });
                         counter++;
                         sumrate += +f[sequentialColumn];
@@ -209,18 +203,18 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
                     .enter()
                     .append("path")
                       .attr("class", function(d){
-                        if((d.properties.NAME_1==="Metropolitan Manila")){
-                            return d.properties.NAME_2.replace(/ /g,'').replace(/[^A-Za-z0-9_]/g,"").toLowerCase()+" province";
-                        }
-                        else
+                        // if((d.properties.NAME_1==="Metropolitan Manila")){
+                        //     return d.properties.NAME_2.replace(/ /g,'').replace(/[^A-Za-z0-9_]/g,"").toLowerCase()+" province";
+                        // }
+                        // else
                             return d.properties.NAME_1.replace(/ /g,'').replace(/[^A-Za-z0-9_]/g,"").toLowerCase()+" province";
                       })
                       .attr("population",function(d){return d[thematicColumn];})
                       .attr("province", function(d){
-                        if((d.properties.NAME_1==="Metropolitan Manila")){
-                            return d.properties.NAME_2;
-                        }
-                        else
+                        // if((d.properties.NAME_1==="Metropolitan Manila")){
+                        //     return d.properties.NAME_2;
+                        // }
+                        // else
                             return d.properties.NAME_1;
                       })
                       .attr("d", path)              
@@ -258,10 +252,10 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
                 provinces.forEach(function(d, i) {  
                     if(d.properties.NAME_1!="Laguna Lake"){   
                         var getid = "";
-                        if((d.properties.NAME_1==="Metropolitan Manila")){
-                            getid = d.properties.NAME_2.replace(/ /g,'').replace(/[^A-Za-z0-9_]/g,"").toLowerCase();
-                        }
-                        else
+                        // if((d.properties.NAME_1==="Metropolitan Manila")){
+                        //     getid = d.properties.NAME_2.replace(/ /g,'').replace(/[^A-Za-z0-9_]/g,"").toLowerCase();
+                        // }
+                        // else
                             getid = d.properties.NAME_1.replace(/ /g,'').replace(/[^A-Za-z0-9_]/g,"").toLowerCase();   
                         
                         var node = {};
@@ -301,14 +295,17 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
                         }
 
                         if((d.properties.NAME_1==="Metropolitan Manila")){
-                            node.province = d.properties.NAME_2;                
-                            node.class = "metromanila";
+                            //node.province = d.properties.NAME_2; 
+                            node.province = d.properties.NAME_1;                
+                            node.class = "metropolitanmanila";
+                            console.log(d)
+                            console.log(arw);
                             mmnodes.push(node);
                         }
                         else{
                             node.province = d.properties.NAME_1;
-                            if((d.properties.REGION==="Cagayan Valley (Region II)")){
-                                node.class = "cagayan";
+                            if((d.properties.REGION==="Central Luzon (Region III)")){
+                                node.class = "central";
                                 cnodes.push(node);
                             }
                             else if((d.properties.REGION==="CALABARZON (Region IV-A)")){
@@ -316,8 +313,8 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
                                 cbnodes.push(node);
                             }
                             else if((d.properties.REGION==="Ilocos Region (Region I)")
+                                ||(d.properties.REGION==="Cagayan Valley (Region II)")                                
                                 ||(d.properties.REGION==="Cordillera Administrative Region (CAR)")
-                                ||(d.properties.REGION==="Central Luzon (Region III)")
                                 ){
                                 node.class = "northmanila";
                                 nmnodes.push(node);
@@ -332,17 +329,17 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
                 });        
 
                 //draw different node sections
-                var nmnodemap = drawnodes(vis,"nmnodemap",nmnodes,0,-10,sequentialDataSource,sequentialColumn,mapcolor,color);
-                var smnodemap = drawnodes(vis,"smnodemap",smnodes,0,90,sequentialDataSource,sequentialColumn,mapcolor,color);
-                var mmnodemap = drawnodes(vis,"mmnodemap",mmnodes,140,-40,sequentialDataSource,sequentialColumn,mapcolor,color);
+                var nmnodemap = drawnodes(vis,"nmnodemap",nmnodes,0,-20,sequentialDataSource,sequentialColumn,mapcolor,color);
+                var smnodemap = drawnodes(vis,"smnodemap",smnodes,0,145,sequentialDataSource,sequentialColumn,mapcolor,color);
+                var mmnodemap = drawnodes(vis,"mmnodemap",mmnodes,5,45,sequentialDataSource,sequentialColumn,mapcolor,color);
                 var cnodemap = drawnodes(vis,"cnodemap",cnodes,0,0,sequentialDataSource,sequentialColumn,mapcolor,color);
-                var cbnodemap = drawnodes(vis,"cbnodemap",cbnodes,0,70,sequentialDataSource,sequentialColumn,mapcolor,color);
+                var cbnodemap = drawnodes(vis,"cbnodemap",cbnodes,0,110,sequentialDataSource,sequentialColumn,mapcolor,color);
 
                 //adjust gravity and charge here
-                forcelayout(mmnodes,mmnodemap,0.01,-.6);
-                forcelayout(nmnodes,nmnodemap,0,-.5);
-                forcelayout(cbnodes,cbnodemap,0.0005,-1);
-                forcelayout(cnodes,cnodemap,0.0005,0.2);
+                //forcelayout(mmnodes,mmnodemap,0.01,-.6);
+                forcelayout(nmnodes,nmnodemap,0.0005,0);
+                forcelayout(cbnodes,cbnodemap,0.0004,-2);
+                forcelayout(cnodes,cnodemap,0,-1);
                 forcelayout(smnodes,smnodemap,0.001,-1);
 
                 //add hover action    
@@ -443,7 +440,7 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
 
             function collide(node) {
                 var nx1, nx2, ny1, ny2, padding;
-                padding = 100;
+                padding = 30;
                 nx1 = node.x - padding;
                 nx2 = node.x2 + padding;
                 ny1 = node.y - padding;
