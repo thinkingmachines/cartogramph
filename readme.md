@@ -82,13 +82,13 @@ Make sure the paths to the data files are correct before running the server.
 If you're using custom csvs, check the province names to see if the names are in all caps and match the ones in the sample csvs. Check out the example csvs in the data folder (philpopulation.csv, philpoverty.csv, random.csv).
 
 Example:
-| province            | poverty2015   |
-| ------------------- | ------------- |
-| METROPOLITAN MANILA | 4.8           |
-| ABRA                | 32.6          |
-| BENGUET             | 6.4           |
-| IFUGAO              | 32.8          |
-| KALINGA             | 24.2          |
+| province | poverty2015 |
+| --- | --- |
+| METROPOLITAN MANILA | 4.8 |
+| ABRA | 32.6 |
+| BENGUET | 6.4 |
+| IFUGAO | 32.8 |
+| KALINGA | 24.2 |
 
 ## Contributors
 
