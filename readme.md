@@ -9,30 +9,54 @@ Tweet us at [@thinkdatasci](http://twitter.com/thinkdatasci) with the hashtag #C
 
 
 1. Simple Cartogram - Province size is defined by population. 
-2. Thematic Cartogram - Province size is defined by a custom variable `thematicColumn` that you set!
-3. Sequential Cartogram - Province size is defined by population. Heatmap color intensity changes depending on a custom variable `sequentialColumn` that you set. 
+2. Custom Cartogram - Province size is defined by a custom variable `customColumn` that you set!
+3. Chloropleth Cartogram - Province size is defined by population. Heatmap color intensity changes depending on a custom variable `chloroplethColumn` that you set. 
 
 
 ## Code Example
 
+This is the sample code that generates three cartograms in the demo.
 ```javascript
+//defaults
+var GEODATA = "data/provinces.json"; //link to the map json source file
+var POPULATION = "data/philpopulation.csv"; //link to population data
+var POPULATION_COL = "pop2015"; //thematic variable
+var POPULATION_LABEL = "Population"; //label
+
 //declare variables
-var thematicDataSource = "data/random.csv"; //link to population data
-var thematicColumn = "poverty2015"; //thematic variable
-var thematicLabel = "Random"; //label of variable
+var customDataSource = "data/random.csv"; //link to population data
+var customColumn = "poverty2015"; //thematic variable
+var customLabel = "Random"; //label of variable
 
-var sequentialDataSource = "data/philpoverty2015.csv"; //link to poverty data
-var sequentialColumn = "poverty2015"; //variable you want to map (0-100%)
-var sequentialLabel = "Poverty Rate"; //label of variable
+var chloroplethDataSource = "data/philpoverty.csv"; //link to poverty data
+var chloroplethColumn = "poverty2015"; //variable you want to map (0-100%)
+var chloroplethLabel = "Poverty Rate"; //label of variable
 
-//Make a default population-based cartogram 
 simpleCartogram("#vis","#ef4631");
 
-//Make a cartogram using a different thematic variable
-thematicCartogram("#vis2",thematicDataSource,thematicColumn,thematicLabel,"#00aac5");
+customCartogram("#vis2",customDataSource,customColumn,customLabel,"#00aac5");
 
-//Make a chloropleth cartogram
-sequentialCartogram("#vis3",sequentialDataSource,sequentialColumn,sequentialLabel,"#c30202");
+chloroplethCartogram("#vis3",chloroplethDataSource,chloroplethColumn,chloroplethLabel,"#c30202");
+```
+
+To make a completely customized cartogram, you can use the makeCartogram function.
+```javascript
+//defaults
+var GEODATA = "data/provinces.json"; //link to the map json source file
+var POPULATION = "data/philpopulation.csv"; //link to population data
+var POPULATION_COL = "pop2015"; //thematic variable
+var POPULATION_LABEL = "Population"; //label
+
+//declare variables
+var customDataSource = "data/random.csv"; //link to population data
+var customColumn = "poverty2015"; //thematic variable
+var customLabel = "Random"; //label of variable
+
+var chloroplethDataSource = "data/philpoverty.csv"; //link to poverty data
+var chloroplethColumn = "poverty2015"; //variable you want to map (0-100%)
+var chloroplethLabel = "Poverty Rate"; //label of variable
+
+makecartogram(visID,geoData,customDataSource,customColumn,customLabel,chloroplethDataSource,chloroplethColumn,chloroplethLabel,'#ef4631');
 ```
 
 ## Motivation
@@ -53,7 +77,19 @@ Simply import JQuery, the D3 library, Topojson.js and the cartogramph.js files i
 
 Make sure the paths to the data files are correct before running the server.
 
-If you're using custom csvs, check the province names to see if the names are in all caps and match the ones in the sample csvs.
+## Using Your Own Data
+
+If you're using custom csvs, check the province names to see if the names are in all caps and match the ones in the sample csvs. Check out the example csvs in the data folder (philpopulation.csv, philpoverty.csv, random.csv).
+
+For best results making a chloropleth, use a percentage rate for the variable. Ex:
+
+| province | poverty2015 |
+| --- | --- |
+| METROPOLITAN MANILA | 4.8 |
+| ABRA | 32.6 |
+| BENGUET | 6.4 |
+| IFUGAO | 32.8 |
+| KALINGA | 24.2 |
 
 ## Contributors
 

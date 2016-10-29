@@ -1,25 +1,20 @@
-//defaults
 
-var GEODATA = "data/philippines-topo2.json"; //link to the map json source file
-var THEMATIC = "data/philpopulation2015.csv"; //link to population data
-var THEMATICCOL = "pop2015"; //thematic variable
-var THEMATICLAB = "Population"; //label
 
 //makes a plain cartogram
 function simpleCartogram(visID,mapcolor){    
-    var c = new makecartogram(visID,GEODATA,THEMATIC,THEMATICCOL,THEMATICLAB,"","","",mapcolor);
+    var c = new makecartogram(visID,GEODATA,POPULATION,POPULATION_COL,POPULATION_LABEL,"","","",mapcolor);
 }
 
-function thematicCartogram(visID,thematicDataSource,thematicColumn,thematicLabel,mapcolor){
-    makecartogram(visID,GEODATA,thematicDataSource,thematicColumn,thematicLabel,"","","",mapcolor);
+function customCartogram(visID,customDataSource,customColumn,customLabel,mapcolor){
+    makecartogram(visID,GEODATA,customDataSource,customColumn,customLabel,"","","",mapcolor);
 
 }
 
-function sequentialCartogram(visID,sequentialDataSource,sequentialColumn,sequentialLabel,mapcolor){
-    makecartogram(visID,GEODATA,THEMATIC,THEMATICCOL,THEMATICLAB,sequentialDataSource,sequentialColumn,sequentialLabel,mapcolor);
+function chloroplethCartogram(visID,chloroplethDataSource,chloroplethColumn,chloroplethLabel,mapcolor){
+    makecartogram(visID,GEODATA,POPULATION,POPULATION_COL,POPULATION_LABEL,chloroplethDataSource,chloroplethColumn,chloroplethLabel,mapcolor);
 }
 
-function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicLabel,sequentialDataSource,sequentialColumn,sequentialLabel,mapcolor){
+function makecartogram(visID,geoData,customDataSource,customColumn,customLabel,chloroplethDataSource,chloroplethColumn,chloroplethLabel,mapcolor){
 
     //toggle
     var current = 'cartogram-button';
@@ -27,7 +22,7 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
     //total population
     var totalpop = 0;
 
-    //average of sequential variable
+    //average of chloropleth variable
     var ave = 0;
 
     //format
@@ -39,7 +34,7 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
     .range(["#fff8ef",mapcolor]);
 
     //draw vis
-    var height = 700;
+    var height = 800;
     var width  = 600;
 
     var vis = d3.select(visID).append("svg").attr("width", width).attr("height", height).attr("cartogram","true");
@@ -54,7 +49,7 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
 
     var nodes = [];
     var mmnodes = [];  //metromanila nodes
-    var cnodes = []; //cagayan region
+    var cnodes = []; //central luzon region
     var cbnodes = []; //calabarzon region
     var nmnodes = [];  //north of manila
     var smnodes = [];  //south of manila
@@ -96,28 +91,28 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
             .attr("class","munid")
             .text("Philippines");
       
-        var provinces = topojson.feature(geo_data, geo_data.objects.philippines).features;
+        var provinces = topojson.feature(geo_data, geo_data.objects.provsh).features;
 
-        //enter thematic data
-        d3.csv(thematicDataSource, function(error,csv){
+        //enter custom data
+        d3.csv(customDataSource, function(error,csv){
           
             csv.forEach(function(d, i) {
                 provinces.forEach(function(e, j) {
                 
                     if (d.province === e.properties.PROVINCE.toUpperCase()) {
-                        e[thematicColumn] = +d[thematicColumn];              
+                        e[customColumn] = +d[customColumn];              
                     }
-                    if ((e.properties.PROVINCE==="Metropolitan Manila")&&(d.province === e.properties.NAME_2.toUpperCase())){                            
-                        e[thematicColumn] = +d[thematicColumn];   
-                    }
+                    // if ((e.properties.PROVINCE==="Metropolitan Manila")&&(d.province === e.properties.NAME_2.toUpperCase())){                            
+                    //     e[customColumn] = +d[customColumn];   
+                    // }
 
                 })
 
-            totalpop += parseInt(d[thematicColumn]);
+            totalpop += parseInt(d[customColumn]);
             
             })
 
-            //enter sequential data
+            //enter chloropleth data
             var counter = 0;
             var sumrate = 0;
 
@@ -126,45 +121,45 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
             .attr("x", 0)
             .attr("y", 70)
             .attr("class","populationlabel")
-            .text(thematicLabel+": ");  
+            .text(customLabel+": ");  
             boxGroup.append("text") 
             .attr("x", 0)
             .attr("y", 90)
             .attr("class","population")
             .text(commaformat(totalpop));            
 
-            if(sequentialDataSource!=""){
+            if(chloroplethDataSource!=""){
                 
 
-                d3.csv(sequentialDataSource, function(error,csv){
+                d3.csv(chloroplethDataSource, function(error,csv){
                     csv.forEach(function(f, g) {
                         provinces.forEach(function(e, j) {
     
                             if (f.province === e.properties.PROVINCE.toUpperCase()) {
-                              e[sequentialColumn] = +f[sequentialColumn];             
+                              e[chloroplethColumn] = +f[chloroplethColumn];             
                             }
-                            if ((e.properties.PROVINCE==="Metropolitan Manila")&&(f.province === e.properties.NAME_2.toUpperCase())){                            
-                              e[sequentialColumn] = +f[sequentialColumn]; 
-                            }
+                            // if ((e.properties.PROVINCE==="Metropolitan Manila")&&(f.province === e.properties.NAME_2.toUpperCase())){                            
+                            //   e[chloroplethColumn] = +f[chloroplethColumn]; 
+                            // }
                         });
                         counter++;
-                        sumrate += +f[sequentialColumn];
+                        sumrate += +f[chloroplethColumn];
                     });
                     ave = (sumrate/counter).toFixed(2);
 
                     //rest of the code should go here
-                    drawGeographicMap(vis,visID,provinces,thematicColumn,path,totalpop,sequentialDataSource,sequentialColumn,mapcolor,color);
+                    drawGeographicMap(vis,visID,provinces,customColumn,path,totalpop,chloroplethDataSource,chloroplethColumn,mapcolor,color);
 
 
                 });
 
   
-                //add sequential labels
+                //add chloropleth labels
                 boxGroup.append("text") 
                 .attr("x", 0)
                 .attr("y", 120)
                 .attr("class","poverty_label")
-                .text(sequentialLabel + ": ");  
+                .text(chloroplethLabel + ": ");  
                 boxGroup.append("text") 
                 .attr("x", 0)
                 .attr("y", 140)
@@ -198,9 +193,9 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
 
             //lets make the geographic map            
             else{
-                drawGeographicMap(vis,visID,provinces,thematicColumn,path,totalpop,sequentialDataSource,sequentialColumn,mapcolor,color);
+                drawGeographicMap(vis,visID,provinces,customColumn,path,totalpop,chloroplethDataSource,chloroplethColumn,mapcolor,color);
             }
-            function drawGeographicMap(vis,visID,provinces,thematicColumn,path,totalpop,sequentialDataSource,sequentialColumn,mapcolor,color){
+            function drawGeographicMap(vis,visID,provinces,customColumn,path,totalpop,chloroplethDataSource,chloroplethColumn,mapcolor,color){
 
                 var philmap = vis.append("g").attr("class","philmap").attr("transform", "translate(0,50)");
                           
@@ -209,37 +204,37 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
                     .enter()
                     .append("path")
                       .attr("class", function(d){
-                        if((d.properties.NAME_1==="Metropolitan Manila")){
-                            return d.properties.NAME_2.replace(/ /g,'').replace(/[^A-Za-z0-9_]/g,"").toLowerCase()+" province";
-                        }
-                        else
+                        // if((d.properties.NAME_1==="Metropolitan Manila")){
+                        //     return d.properties.NAME_2.replace(/ /g,'').replace(/[^A-Za-z0-9_]/g,"").toLowerCase()+" province";
+                        // }
+                        // else
                             return d.properties.NAME_1.replace(/ /g,'').replace(/[^A-Za-z0-9_]/g,"").toLowerCase()+" province";
                       })
-                      .attr("population",function(d){return d[thematicColumn];})
+                      .attr("population",function(d){return d[customColumn];})
                       .attr("province", function(d){
-                        if((d.properties.NAME_1==="Metropolitan Manila")){
-                            return d.properties.NAME_2;
-                        }
-                        else
+                        // if((d.properties.NAME_1==="Metropolitan Manila")){
+                        //     return d.properties.NAME_2;
+                        // }
+                        // else
                             return d.properties.NAME_1;
                       })
                       .attr("d", path)              
                       .attr("r", 10)       
                       .attr("rate",function(d){
-                        if(sequentialDataSource!=""){
-                            return d[sequentialColumn]+"%";
+                        if(chloroplethDataSource!=""){
+                            return d[chloroplethColumn]+"%";
                         }
                         else{
                             return 0;
                         }
                         })       
                       .style("fill", function(d) {  
-                        if(sequentialDataSource!=""){    
-                          if(d[sequentialColumn]==null){
+                        if(chloroplethDataSource!=""){    
+                          if(d[chloroplethColumn]==null){
                             return "#ffffff";
                           }
                           else
-                            {return color(d[sequentialColumn]);} 
+                            {return color(d[chloroplethColumn]);} 
                         
                         }
                         else if(d.properties.NAME_1!="Laguna Lake"){
@@ -258,16 +253,16 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
                 provinces.forEach(function(d, i) {  
                     if(d.properties.NAME_1!="Laguna Lake"){   
                         var getid = "";
-                        if((d.properties.NAME_1==="Metropolitan Manila")){
-                            getid = d.properties.NAME_2.replace(/ /g,'').replace(/[^A-Za-z0-9_]/g,"").toLowerCase();
-                        }
-                        else
+                        // if((d.properties.NAME_1==="Metropolitan Manila")){
+                        //     getid = d.properties.NAME_2.replace(/ /g,'').replace(/[^A-Za-z0-9_]/g,"").toLowerCase();
+                        // }
+                        // else
                             getid = d.properties.NAME_1.replace(/ /g,'').replace(/[^A-Za-z0-9_]/g,"").toLowerCase();   
                         
                         var node = {};
                         
                         var area = 0;    
-                        var pop = d[thematicColumn];
+                        var pop = d[customColumn];
 
                         var vid = visID.replace(/#/g,'');
 
@@ -295,20 +290,21 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
                         node.x = startx;
                         node.y = starty;
                         node.class = "";
-                        node.population = d[thematicColumn];
-                        if(sequentialDataSource!=""){
-                            node[sequentialColumn] = d[sequentialColumn];
+                        node.population = d[customColumn];
+                        if(chloroplethDataSource!=""){
+                            node[chloroplethColumn] = d[chloroplethColumn];
                         }
 
                         if((d.properties.NAME_1==="Metropolitan Manila")){
-                            node.province = d.properties.NAME_2;                
+                            //node.province = d.properties.NAME_2; 
+                            node.province = d.properties.NAME_1;                
                             node.class = "metromanila";
                             mmnodes.push(node);
                         }
                         else{
                             node.province = d.properties.NAME_1;
-                            if((d.properties.REGION==="Cagayan Valley (Region II)")){
-                                node.class = "cagayan";
+                            if((d.properties.REGION==="Central Luzon (Region III)")){
+                                node.class = "central";
                                 cnodes.push(node);
                             }
                             else if((d.properties.REGION==="CALABARZON (Region IV-A)")){
@@ -316,8 +312,8 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
                                 cbnodes.push(node);
                             }
                             else if((d.properties.REGION==="Ilocos Region (Region I)")
+                                ||(d.properties.REGION==="Cagayan Valley (Region II)")                                
                                 ||(d.properties.REGION==="Cordillera Administrative Region (CAR)")
-                                ||(d.properties.REGION==="Central Luzon (Region III)")
                                 ){
                                 node.class = "northmanila";
                                 nmnodes.push(node);
@@ -332,17 +328,17 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
                 });        
 
                 //draw different node sections
-                var nmnodemap = drawnodes(vis,"nmnodemap",nmnodes,0,-10,sequentialDataSource,sequentialColumn,mapcolor,color);
-                var smnodemap = drawnodes(vis,"smnodemap",smnodes,0,90,sequentialDataSource,sequentialColumn,mapcolor,color);
-                var mmnodemap = drawnodes(vis,"mmnodemap",mmnodes,140,-40,sequentialDataSource,sequentialColumn,mapcolor,color);
-                var cnodemap = drawnodes(vis,"cnodemap",cnodes,0,0,sequentialDataSource,sequentialColumn,mapcolor,color);
-                var cbnodemap = drawnodes(vis,"cbnodemap",cbnodes,0,70,sequentialDataSource,sequentialColumn,mapcolor,color);
+                var nmnodemap = drawnodes(vis,"nmnodemap",nmnodes,0,-20,chloroplethDataSource,chloroplethColumn,mapcolor,color);
+                var smnodemap = drawnodes(vis,"smnodemap",smnodes,0,145,chloroplethDataSource,chloroplethColumn,mapcolor,color);
+                var mmnodemap = drawnodes(vis,"mmnodemap",mmnodes,5,45,chloroplethDataSource,chloroplethColumn,mapcolor,color);
+                var cnodemap = drawnodes(vis,"cnodemap",cnodes,0,0,chloroplethDataSource,chloroplethColumn,mapcolor,color);
+                var cbnodemap = drawnodes(vis,"cbnodemap",cbnodes,0,110,chloroplethDataSource,chloroplethColumn,mapcolor,color);
 
                 //adjust gravity and charge here
-                forcelayout(mmnodes,mmnodemap,0.01,-.6);
-                forcelayout(nmnodes,nmnodemap,0,-.5);
-                forcelayout(cbnodes,cbnodemap,0.0005,-1);
-                forcelayout(cnodes,cnodemap,0.0005,0.2);
+                //forcelayout(mmnodes,mmnodemap,0.01,-.6);
+                forcelayout(nmnodes,nmnodemap,0.0005,0);
+                forcelayout(cbnodes,cbnodemap,0.0004,-2);
+                forcelayout(cnodes,cnodemap,0,-1);
                 forcelayout(smnodes,smnodemap,0.001,-1);
 
                 //add hover action    
@@ -355,7 +351,7 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
 
 
             //make the node drawing function
-            function drawnodes(vis,nodemapid,nodes,translatex,translatey,sequentialDataSource,sequentialColumn,mapcolor,color){
+            function drawnodes(vis,nodemapid,nodes,translatex,translatey,chloroplethDataSource,chloroplethColumn,mapcolor,color){
                 var nodemap = vis.append("g").attr("class",nodemapid).attr("transform", "translate("+translatex+","+translatey+")");
                 nodemap.selectAll("rect")
                     .data(nodes)
@@ -390,16 +386,16 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
                     .attr("population", function(d) {                     
                         return d.population; })
                     .attr("rate", function(d) {    
-                    if(sequentialDataSource!=""){            
-                        return d[sequentialColumn]+"%"; 
+                    if(chloroplethDataSource!=""){            
+                        return d[chloroplethColumn]+"%"; 
                     }
                     else{
                         return 0;
                     }
                     })
                     .style("fill", function(d) {       
-                    if(sequentialDataSource!=""){              
-                        return color(d[sequentialColumn]); 
+                    if(chloroplethDataSource!=""){              
+                        return color(d[chloroplethColumn]); 
                     }
                     else{
                         return mapcolor;
@@ -443,7 +439,7 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
 
             function collide(node) {
                 var nx1, nx2, ny1, ny2, padding;
-                padding = 100;
+                padding = 30;
                 nx1 = node.x - padding;
                 nx2 = node.x2 + padding;
                 ny1 = node.y - padding;
@@ -575,7 +571,7 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
     function munihover(e){    
         $(visID+' .munid').text($(this).attr("province"));   
         $(visID+' .population').text(commaformat($(this).attr("population")));
-        if(sequentialDataSource!=""){
+        if(chloroplethDataSource!=""){
         $(visID+' .poverty').text($(this).attr("rate")); }
         $(this).css("fill-opacity",0.5);           
     }
@@ -583,7 +579,7 @@ function makecartogram(visID,geoData,thematicDataSource,thematicColumn,thematicL
     function hidedetail(e){
         $(visID+' .munid').text("Philippines");
         $(visID+' .population').text(commaformat(totalpop));
-        if(sequentialDataSource!=""){
+        if(chloroplethDataSource!=""){
         $(visID+' .poverty').text(ave+"%"); }
         $(this).css("fill-opacity",0.9);
     }
